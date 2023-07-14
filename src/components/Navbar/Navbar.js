@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaSun, FaMoon, FaSearch } from 'react-icons/fa';
-import logo from "../../assests/devlogo.png"
+import logo from "../../assests/devlogo.png";
 import './Navbar.css';
 
 function Navbar() {
