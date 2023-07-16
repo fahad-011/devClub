@@ -1,5 +1,5 @@
 import React from "react";
-// import Image from "../../assests/logo1.jpg"; 
+import Image from "../../assests/logo1.jpg"; 
 
 
 const Home = () => {
@@ -16,9 +16,9 @@ const Home = () => {
             </p>
           </div>
         </div>
-        {/* <div className="ml-auto flex-shrink-0 flex items-center">
+        <div className="ml-auto flex-shrink-0 flex items-center">
           <img src={Image} alt="Image" className="h-auto max-h-full h-48 md:h-56 lg:h-64 xl:h-72" />
-        </div> */}
+        </div>
       </div>
     </div>
   );
