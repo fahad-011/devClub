@@ -1,6 +1,5 @@
 import React from "react";
-import Image from "../../assests/logo1.jpg"; 
-
+import Image1 from "../../assests/logo1.jpg"
 
 const Home = () => {
   return (
@@ -16,8 +15,13 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="ml-auto flex-shrink-0 flex items-center">
-          <img src={Image} alt="Image" className="h-auto max-h-full h-48 md:h-56 lg:h-64 xl:h-72" />
+        {/* Add a container for the image */}
+        <div className="flex items-center justify-end fixed right-10 top-8 bottom-0">
+          <img
+            src={Image1}
+            alt="Image Description"
+            className="w-1/6 md:w-1/4"
+          />
         </div>
       </div>
     </div>
