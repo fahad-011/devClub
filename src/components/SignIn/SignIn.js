@@ -1,6 +1,76 @@
-import React from "react";
+import React, { useState } from 'react';
 
 const LoginSection = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [formError, setFormError] = useState('');
+
+  const validateForm = () => {
+    let isValid = true;
+
+    // Email validation regex
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setEmailError('Incorrect Email');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    // Password validation regex
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordPattern.test(password)) {
+      setPasswordError(
+        'Strong Password: password must me like this Abc@123!'
+      );
+      isValid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    // Check if both email and password are not empty
+    if (email.trim() === '' && password.trim() === '') {
+      setFormError('Email and Password cannot be empty');
+      isValid = false;
+    } else if (email.trim() === '') {
+      setFormError('Email cannot be empty');
+      isValid = false;
+    } else if (password.trim() === '') {
+      setFormError('Password cannot be empty');
+      isValid = false;
+    } else {
+      setFormError('');
+    }
+
+    return isValid;
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setEmailError('');
+    setFormError('');
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setPasswordError('');
+    setFormError('');
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const isValid = validateForm();
+
+    if (isValid) {
+      // Proceed with login or further actions
+      console.log('Login successful');
+    }
+  };
+
   return (
     <section className="h-screen bg-zinc-900">
       <div className="container h-full px-6 py-24">
@@ -16,25 +86,41 @@ const LoginSection = () => {
 
           {/* Right column container with form */}
           <div className="md:w-8/12 lg:ml-6 lg:w-5/12">
-            <form>
+          <form onSubmit={handleFormSubmit}>
               {/* Email input */}
               <div className="relative mb-6" data-te-input-wrapper-init>
               <input
                   type="text"
-                  className="peer block min-h-[auto] w-full rounded border border-white text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base"
+                  className={`peer block min-h-[auto] w-full rounded border ${
+                    emailError ? 'border-red-500' : 'border-white'
+                  } text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base`}
                   id="exampleFormControlInput3"
-                  placeholder="Email" 
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
                 />
+                {emailError && (
+                  <span className="text-red-500 text-sm absolute top-full mt-1">{emailError}</span>
+                )}
               </div>
 
               {/* Password input */}
               <div className="relative mb-6" data-te-input-wrapper-init>
               <input
                   type="password"
-                  className="peer block min-h-[auto] w-full rounded border border-white text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base"
+                  className={`peer block min-h-[auto] w-full rounded border ${
+                    passwordError ? 'border-red-500' : 'border-white'
+                  } text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base`}
                   id="exampleFormControlInput33"
-                  placeholder="Password" 
+                  placeholder="Password"
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
+                {passwordError && (
+                  <span className="text-red-500 text-sm absolute top-full mt-1">
+                    {passwordError}
+                  </span>
+                )}
               </div>
 
               {/* Remember me checkbox */}
@@ -65,14 +151,19 @@ const LoginSection = () => {
               </div>
 
               {/* Submit button */}
-              <button
-                type="submit"
-                className="inline-block w-full rounded bg-blue-500 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                data-te-ripple-init
-                data-te-ripple-color="light"
-              >
-                Sign in
-              </button>
+              {formError && (
+              <div className="text-red-500 text-sm mb-4">{formError}</div>
+            )}
+
+            {/* ... */}
+            <button
+              type="submit"
+              className="inline-block w-full rounded bg-blue-500 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+              data-te-ripple-init
+              data-te-ripple-color="light"
+            >
+              Sign in
+            </button>
 
               {/* Divider */}
               <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
