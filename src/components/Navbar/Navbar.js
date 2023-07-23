@@ -10,7 +10,7 @@ function Navbar() {
   };
 
   return (
-    <nav className={`flex justify-between items-center bg-white p-4 fixed top-0 w-full z-50 ${isDarkMode ? 'bg-black text-white' : ''}`}>
+    <nav className={`flex justify-between items-center text-gray-500 p-4 fixed top-0 w-full z-50 ${isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <div className="flex items-center pl-14 space-x-4"> {/* Add 'pl-4' for left padding and 'space-x-4' for horizontal spacing */}
         <div className="mr-6">
           {isDarkMode ? (

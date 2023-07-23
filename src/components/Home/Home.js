@@ -30,7 +30,7 @@ const Home = () => {
           <img
             src={Image1}
             alt="img"
-            className="w-1/3 sm:w-1/2 md:w-full max-w-md"
+            className="w-72 h-62"
           />
         </div>
       </div>
