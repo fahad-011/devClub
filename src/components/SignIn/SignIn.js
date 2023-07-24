@@ -86,7 +86,7 @@ const LoginSection = () => {
         if (response.status === 200) {
           // Login successful, do something (e.g., redirect to a dashboard)
           console.log('Login successful');
-          navigate('/project');
+          navigate('/dashboard');
         } else {
           // Login failed, display error message
           console.error(data); // Log the error message from the backend

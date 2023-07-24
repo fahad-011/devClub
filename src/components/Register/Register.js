@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
@@ -10,6 +10,8 @@ const Register = () => {
   const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [formError, setFormError] = useState('');
+
+  const navigate = useNavigate();
 
   const validateForm = () => {
     let isValid = true;
@@ -43,7 +45,7 @@ const Register = () => {
 
     // Check if both email and password are not empty
     if (email.trim() === '' && password.trim() === '') {
-      setFormError('Email and Password cannot be empty');
+      setFormError('This feild cannot be empty');
       isValid = false;
     } else if (email.trim() === '') {
       setFormError('Email cannot be empty');
@@ -51,16 +53,12 @@ const Register = () => {
     } else if (password.trim() === '') {
       setFormError('Password cannot be empty');
       isValid = false;
-    } else {
+    } else if(name.trim() === '') {
+      setFormError('Name cannot be empty');
+    }
+     else {
       setFormError('');
     }
-
-    if (name.trim() === '') {
-        setFormError('Name cannot be empty');
-        isValid = false;
-      } else {
-        setFormError('');
-      }
 
     return isValid;
   };
@@ -82,14 +80,35 @@ const Register = () => {
     setFormError('');
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const isValid = validateForm();
 
     if (isValid) {
-      // Proceed with login or further actions
-      console.log('Registration successful');
+      try {
+        const response = await fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log('Registration successful');
+          navigate('/dashboard');
+        } else {
+          
+          console.log('Error:', data);
+          setFormError('Error during registration. Please try again.');
+        }
+      } catch (error) {
+        console.log('Error:', error);
+        setFormError('Error during registration. Please try again.');
+      }
     }
   };
 
@@ -113,19 +132,21 @@ const Register = () => {
             {/* Name input */}
             <div className="relative mb-6" data-te-input-wrapper-init>
                 <input
-                    type="text"
-                    className={`peer block min-h-[auto] w-full rounded border border-white ${
+                  type="text"
+                  className={`peer block min-h-[auto] w-full rounded border ${
                     nameError ? 'border-red-500' : 'border-white'
-                    } text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base`}
-                    id="exampleFormControlInputName"
-                    placeholder="Name"
-                    value={name}
-                    onChange={handleNameChange}
+                  } text-white bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none shadow-sm focus:border-blue-500 focus:placeholder-transparent text-lg peer-focus:text-base`}
+                  id="exampleFormControlInputName"
+                  placeholder="Name"
+                  value={name}
+                  onChange={handleNameChange}
                 />
                 {nameError && (
-                  <span className="text-red-500 text-sm absolute top-full mt-1">{nameError}</span>
+                  <span className="text-red-500 text-sm absolute top-full mt-1">
+                    {nameError}
+                  </span>
                 )}
-            </div>
+              </div>
 
               {/* Email input */}
               <div className="relative mb-6" data-te-input-wrapper-init>
