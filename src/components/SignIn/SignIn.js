@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 
 const LoginSection = () => {
 
@@ -8,6 +8,8 @@ const LoginSection = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [formError, setFormError] = useState('');
+
+  const navigate = useNavigate();
 
   const validateForm = () => {
     let isValid = true;
@@ -61,14 +63,39 @@ const LoginSection = () => {
     setFormError('');
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const isValid = validateForm();
 
     if (isValid) {
-      // Proceed with login or further actions
-      console.log('Login successful');
+      try {
+        const response = await fetch('http://localhost:3000/signin', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          // Login successful, do something (e.g., redirect to a dashboard)
+          console.log('Login successful');
+          navigate('/project');
+        } else {
+          // Login failed, display error message
+          console.error(data); // Log the error message from the backend
+          setFormError('Invalid email or password');
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        setFormError('An error occurred while logging in');
+      }
     }
   };
 

@@ -4,9 +4,10 @@ import Navbar from './components/Navbar/Navbar.js';
 import Home from './components/Home/Home.js';
 import Register from './components/Register/Register.js';
 import SignIn from './components/SignIn/SignIn.js';
+import Project from './components/Project/Project.js';
 
 
-function App() {
+function App () {
   return (
     <Router>
       <div className="App">
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<HomeWithNavbar />} />
           <Route path="/register" element={<Register />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/project" element={<Project />} />
         </Routes>
       </div>
     </Router>
